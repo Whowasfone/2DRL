@@ -10,6 +10,10 @@ using UnityEngine;
 // *
 //
 // Changelog (started 3/9/2017):
+// *3/10/2017
+//		-Moved Player Movement methods to new child class PlayerMovement. Similar changes will likely happen in order to
+//		 define generalized Enemy movement in an EnemyMovement class, which will then have other child classes that specify
+//		 more specific types of enemy movement.
 // *3/9/2017
 //		-Refactored orthogonal movement methods to take more generic controller parameters in order to allow any gameobject 
 //		to be moved using this class.
@@ -32,20 +36,7 @@ public class Movement
 			}
 		}
 	}
-
-	// More specific player movement function
-	public static void MovePlayerUp(Vector3 goal, float yMax, Transform controller)
-	{
-		if (goal.y < yMax)
-		{
-			if (GridContainer.CheckTile (goal))
-			{
-				controller.position = GridContainer._grid.GridToWorld (goal);
-				GridConstructor.playersTurn = false;
-			}
-		}
-	}
-
+		
 	// Attempts to move an object down, after checking if the desired coordinate pair indicated by goal is valid. The yMin
 	// parameter defines the lowest y-coordinate that a given object can move to, and the controller parameter is
 	// a reference to the object that is calling MoveDown and is used to update that object's position.
@@ -59,20 +50,7 @@ public class Movement
 			}
 		}
 	}
-
-	// More specific player movement function
-	public static void MovePlayerDown(Vector3 goal, float yMin, Transform controller)
-	{
-		if (goal.y > yMin)
-		{
-			if (GridContainer.CheckTile (goal))
-			{
-				controller.position = GridContainer._grid.GridToWorld (goal);
-				GridConstructor.playersTurn = false;
-			}
-		}
-	}
-
+		
 	// Attempts to move an object right, after checking if the desired coordinate pair indicated by goal is valid. The xMax
 	// parameter defines the highest x-coordinate that a given object can move to, and the controller parameter is
 	// a reference to the object that is calling MoveRight and is used to update that object's position.
@@ -86,20 +64,7 @@ public class Movement
 			}
 		}
 	}
-
-	// More specific player movement function
-	public static void MovePlayerRight(Vector3 goal, float xMax, Transform controller)
-	{
-		if (goal.x < xMax)
-		{
-			if (GridContainer.CheckTile (goal))
-			{
-				controller.position = GridContainer._grid.GridToWorld (goal);
-				GridConstructor.playersTurn = false;
-			}
-		}
-	}
-
+		
 	// Attempts to move an object left, after checking if the desired coordinate pair indicated by goal is valid. The xMin
 	// defines the lowest x-coordinate that a given object can move to, and the controller parameter is
 	// a reference to the object that is calling MoveLeft and is used to update that object's position.
@@ -110,19 +75,6 @@ public class Movement
 			if (GridContainer.CheckTile (goal))
 			{
 				controller.position = GridContainer._grid.GridToWorld (goal);
-			}
-		}
-	}
-
-	// More specific player movement function
-	public static void MovePlayerLeft(Vector3 goal, float xMin, Transform controller)
-	{
-		if (goal.x > xMin)
-		{
-			if (GridContainer.CheckTile (goal))
-			{
-				controller.position = GridContainer._grid.GridToWorld (goal);
-				GridConstructor.playersTurn = false;
 			}
 		}
 	}

@@ -18,46 +18,54 @@ using UnityEngine;
 // and would only pass the turn back to the player once all of the AI had decremented
 // it (or a temp variable representing it), signifying that they had all taken moves.
 
-public class AIRoaming : MonoBehaviour 
+public class AIRoaming : ObjectController 
 {
-	private Transform aiObject;
-	private Vector3 aiPos;
+	protected Vector3 prevPos;
 
 	// Use this for initialization
 	void Awake () 
 	{
-		aiObject = GetComponent<Transform> ();
+		obj = GetComponent<Transform> ();
 	}
 	
-	// Update is called once per frame
-	void Update () 
+	// LateUpdate is called once per frame, AFTER all Update() functions have been called.
+	// This means that the AI movement will always wait until after the player has moved before
+	// starting its turn.
+	void LateUpdate () 
 	{
-		aiPos = GridContainer._grid.WorldToGrid (aiObject.position);
+		// prevPos will be used to hold the value of the last location this AI object occupied.
+		// Eventually, we will use this to handle updating the position of the AI in _tiles,
+		// but I have yet to find an elegant solution for this.
+		objPos = GridContainer._grid.WorldToGrid (obj.position);
+		prevPos = objPos;
 		int moveDir = Random.Range(0, 4);
 
 		// Move up
 		if (moveDir == 0 && GridConstructor.playersTurn == false)
 		{
-			Movement.MoveUp ((aiPos+Vector3.up), GridConstructor.rendererMaxY, aiObject);
+			Movement.MoveUp ((objPos+Vector3.up), GridConstructor.rendererMaxY, obj);
 			GridConstructor.playersTurn = true;
 		}
 		// Move down
 		if (moveDir == 1 && GridConstructor.playersTurn == false)
 		{
-			Movement.MoveDown ((aiPos+Vector3.down), 0.0f, aiObject);
+			Movement.MoveDown ((objPos+Vector3.down), 0.0f, obj);
 			GridConstructor.playersTurn = true;
+
 		}
 		// Move right
 		if (moveDir == 2 && GridConstructor.playersTurn == false)
 		{
-			Movement.MoveRight ((aiPos+Vector3.right), GridConstructor.rendererMaxY, aiObject);
+			Movement.MoveRight ((objPos+Vector3.right), GridConstructor.rendererMaxY, obj);
 			GridConstructor.playersTurn = true;
+
 		}
 		// Move left
 		if (moveDir == 3 && GridConstructor.playersTurn == false)
 		{
-			Movement.MoveLeft ((aiPos+Vector3.left), 0.0f, aiObject);
+			Movement.MoveLeft ((objPos+Vector3.left), 0.0f, obj);
 			GridConstructor.playersTurn = true;
+
 		}
 	}
 }

@@ -16,6 +16,12 @@ using UnityEngine;
 //  initialized and held yet.
 //
 // Changelog (started 3/8/2017):
+// *3/10/2017
+//		-Changed PlayerController to inherit from a more abstract ObjectController parent class. The goal is to have
+//		 basic information (such as health and stats) to be defined for every game object (which in this case means
+//		 any entity that can be interacted with on the board. This might need to be changed again later, but it's
+//		 working for now, and I'm sure we'll have some generalized methods that will be useful on all objects at a
+//		 later point in development.
 // *3/9/2017
 // 		-Changed "player"'s type from a PlayerController to a Transform since the only component of "player" we're
 //		 interested in is its transform, for movement purposes.
@@ -32,25 +38,24 @@ using UnityEngine;
 //		 forward.
 //
 
-public class PlayerController : MonoBehaviour 
+public class PlayerController : ObjectController 
 {
-
-	private Vector3 playerTile;
-	private Transform player;
-
 	// Awake will run before any other methods execute, so we'll initialize any variables inside here that need
-	// to be initialized when the player is drawn to the screen.
+	// to be initialized when the player is drawn to the screen. Right now, we only set the reference to the
+	// player's transform.
 	void Awake () 
 	{
-		player = GetComponent<Transform> ();
+		obj = GetComponent<Transform> ();
 	}
 
 	void Update ()
 	{
 		// Convert the player's current worldspace coords into grid coords
-		playerTile = GridContainer._grid.WorldToGrid (player.position);
+		objPos = GridContainer._grid.WorldToGrid (obj.position);
 
-		// Move the player along the grid in discrete steps, instead of smoothly. The Movement class handles all of
+		// MOVEMENT AND INPUT DETECTION
+		//-----------------------------------
+		// Move the player along the grid in discrete steps, instead of smoothly. The PlayerMovement class handles all of
 		// the logic pertaining to moving a game object in the world, including checking if the desired move is valid.
 		// The goal variable will be passed into the various movement methods corresponding to each different keystroke,
 		// and will represent the position we want to move to. Each method will take a second parameter defining the
@@ -58,19 +63,21 @@ public class PlayerController : MonoBehaviour
 		// this case.
 		if (Input.GetKeyDown("up") && GridConstructor.playersTurn)
 		{
-			Movement.MovePlayerUp ((playerTile+Vector3.up), GridConstructor.rendererMaxY, player);
+			PlayerMovement.MoveUp ((objPos+Vector3.up), GridConstructor.rendererMaxY, obj);
 		}
 		if (Input.GetKeyDown("down") && GridConstructor.playersTurn)
 		{
-			Movement.MovePlayerDown ((playerTile+Vector3.down), 0.0f, player);
+			PlayerMovement.MoveDown ((objPos+Vector3.down), 0.0f, obj);
 		}
 		if (Input.GetKeyDown("right") && GridConstructor.playersTurn)
 		{
-			Movement.MovePlayerRight ((playerTile+Vector3.right), GridConstructor.rendererMaxX, player);
+			PlayerMovement.MoveRight ((objPos+Vector3.right), GridConstructor.rendererMaxX, obj);
 		}
 		if (Input.GetKeyDown("left") && GridConstructor.playersTurn)
 		{
-			Movement.MovePlayerLeft ((playerTile+Vector3.left), 0.0f, player);
+			PlayerMovement.MoveLeft ((objPos+Vector3.left), 0.0f, obj);
 		}
 	}
+
+	// A coroutine that prevents the player from moving again until the AI has taken its turn.
 }

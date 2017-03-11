@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectController : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+public class ObjectController : MonoBehaviour 
+{
+	protected float hp;
+	protected int str;
+	protected int mag;
+	protected int agi;
+	protected Transform obj;
+	protected Vector3 objPos;
 }
