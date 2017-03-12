@@ -18,7 +18,9 @@ public class PlayerMovement : Movement
 		{
 			if (GridContainer.CheckTile (goal))
 			{
+				GridContainer.SetTile (controller.position, true);
 				controller.position = GridContainer._grid.GridToWorld (goal);
+				GridContainer.SetTile (controller.position, false);
 				GridConstructor.playersTurn = false;
 				Timing.RunCoroutine (_PassTurnControl ());
 			}
@@ -31,7 +33,9 @@ public class PlayerMovement : Movement
 		{
 			if (GridContainer.CheckTile (goal))
 			{
+				GridContainer.SetTile (controller.position, true);
 				controller.position = GridContainer._grid.GridToWorld (goal);
+				GridContainer.SetTile (controller.position, false);
 				GridConstructor.playersTurn = false;
 				Timing.RunCoroutine (_PassTurnControl ());
 			}
@@ -44,7 +48,9 @@ public class PlayerMovement : Movement
 		{
 			if (GridContainer.CheckTile (goal))
 			{
+				GridContainer.SetTile (controller.position, true);
 				controller.position = GridContainer._grid.GridToWorld (goal);
+				GridContainer.SetTile (controller.position, false);
 				GridConstructor.playersTurn = false;
 				Timing.RunCoroutine (_PassTurnControl ());
 			}
@@ -57,20 +63,22 @@ public class PlayerMovement : Movement
 		{
 			if (GridContainer.CheckTile (goal))
 			{
+				GridContainer.SetTile (controller.position, true);
 				controller.position = GridContainer._grid.GridToWorld (goal);
+				GridContainer.SetTile (controller.position, false);
 				GridConstructor.playersTurn = false;
 				Timing.RunCoroutine (_PassTurnControl ());
 			}
 		}
 	}
 
-	// Coroutine that handles pausing player action until the AI Update() method reads
-	// the state of the playersTurn global and acts accordingly.
+	// Coroutine that will pause the player's movement functions, suspending further
+	// action until the following frame, by which time the AI's turn will have been taken.
 	static IEnumerator<float> _PassTurnControl()
 	{
 		while (GridConstructor.playersTurn == false)
 		{
-			yield return 0f;
+			yield return 0.0f;
 		}
 	}
 }

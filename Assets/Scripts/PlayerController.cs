@@ -16,6 +16,9 @@ using UnityEngine;
 //  initialized and held yet.
 //
 // Changelog (started 3/8/2017):
+// *3/11/2017
+//		-Added a line to the Awake() function that sets the player's initial spawn tile to false to indicate it is
+//		 occupied.
 // *3/10/2017
 //		-Changed PlayerController to inherit from a more abstract ObjectController parent class. The goal is to have
 //		 basic information (such as health and stats) to be defined for every game object (which in this case means
@@ -41,11 +44,12 @@ using UnityEngine;
 public class PlayerController : ObjectController 
 {
 	// Awake will run before any other methods execute, so we'll initialize any variables inside here that need
-	// to be initialized when the player is drawn to the screen. Right now, we only set the reference to the
-	// player's transform.
+	// to be initialized when the player is drawn to the screen. Currently, we set the reference to the player's
+	// transform, and then update our tile array to indicate that the player's tile is impassable to other objects.
 	void Awake () 
 	{
 		obj = GetComponent<Transform> ();
+		GridContainer.SetTile (GridContainer._grid.WorldToGrid(obj.position), false);
 	}
 
 	void Update ()
